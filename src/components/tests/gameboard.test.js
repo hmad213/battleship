@@ -45,4 +45,9 @@ describe("gameboard class", () => {
         expect(gameboard.isAttacked([2, 2])).toBe(true);
         expect(gameboard.isAttacked([4, 3])).toBe(true);
     })
+
+    test("Checking if a position is occupied by a ship", () => {
+        expect(gameboard.isOccupied([2, 2])).toBe(false);
+        expect(gameboard.isOccupied([3, 3])).toBe(true);
+    })
 })

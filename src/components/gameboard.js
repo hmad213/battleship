@@ -40,6 +40,15 @@ class Gameboard{
         }
         return false;
     }
+
+    isOccupied(position){
+        for(let i = 0; i < this.ships.length; i++){
+            if(this.ships[i].contains(position)){
+                return true
+            }
+        }
+        return false;
+    }
 }
 
 export { Gameboard };
