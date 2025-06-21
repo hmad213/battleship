@@ -81,6 +81,7 @@ class Computer extends Player{
             if(!opponentBoard.isAttacked([x, y])){
                 opponentBoard.recieveAttack([x, y]);
                 hasAttacked = true;
+                return [x, y];
             }
         }
     }
