@@ -47,17 +47,31 @@ body{
 .cell{
     border: 1px solid black;
     flex: 1;
+}
+
+.computer .cell:hover{
+    background-color: lightblue;
     cursor: pointer;
 }
 
-.cell:hover{
-    background-color: lightblue;
+.board .missed{
+    background-color: green;
+    cursor: default;
 }
 
-.missed{
+.board .hit{
+    background-color: red;
+    cursor: default;
+}
+
+.board .missed:hover{
     background-color: green;
 }
 
-.hit{
+.board .hit:hover{
     background-color: red;
+}
+
+.ship{
+    background-color: blue;
 }

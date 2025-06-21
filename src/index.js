@@ -4,6 +4,8 @@ import { Renderer } from "./components/ui.js";
 
 let u = new User("Hammad");
 let c = new Computer("AI");
+u.addShip("destroyer", [[3, 3], [4, 3], [5, 3]])
+u.addShip("carrier", [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]])
 for(let i = 0; i < 10; i++){
     for(let j = 0; j < 10; j++){
         u.attack(c.gameboard, [i, j]);
@@ -11,5 +13,4 @@ for(let i = 0; i < 10; i++){
 }
 let r = new Renderer();
 
-r.createBoard(c.name, c.gameboard);
-r.createBoard(u.name, u.gameboard);
+r.renderBoards(u, c);

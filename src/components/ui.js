@@ -13,7 +13,43 @@ class Renderer{
             }
             board.appendChild(row);
         }
-        let cells = board.querySelectorAll(".cell");
+
+        this.showAttacks(gameboard, board);
+
+        let nameComponent = document.createElement("h2");
+        nameComponent.textContent = name;
+
+        boardContainer.appendChild(board);
+        boardContainer.appendChild(nameComponent)
+
+        return boardContainer;
+    }
+
+    renderBoards(user, computer){
+        let userBoard = this.createBoard(user.name, user.gameboard);
+        userBoard.classList.add("user");
+        this.showShips(user.gameboard, userBoard);
+        let computerBoard = this.createBoard(computer.name, computer.gameboard);
+        computerBoard.classList.add("computer");
+        let boards = document.querySelector(".boards");
+        boards.appendChild(userBoard);
+        boards.appendChild(computerBoard);
+    }
+
+    showShips(gameboard, boardDiv){
+        let cells = boardDiv.querySelectorAll(".cell");
+        for(let i = 0; i < gameboard.ships.length; i++){
+            for(let j = 0; j < gameboard.ships[i].position.length; j++){
+                let [x, y] = gameboard.ships[i].position[j];
+                if(!cells[y * 10 + x].classList.contains("hit") && !cells[y * 10 + x].classList.contains("missed")){
+                    cells[y * 10 + x].classList.add("ship");
+                }
+            }
+        }
+    }
+
+    showAttacks(gameboard, boardDiv){
+        let cells = boardDiv.querySelectorAll(".cell");
         for(let i = 0; i < gameboard.missedAttacks.length; i++){
             let [x, y] = gameboard.missedAttacks[i];
             cells[y * 10 + x].classList.add("missed");
@@ -22,14 +58,6 @@ class Renderer{
             let [x, y] = gameboard.hitAttacks[i];
             cells[y * 10 + x].classList.add("hit");
         }
-
-        let nameComponent = document.createElement("h2");
-        nameComponent.textContent = name;
-
-        boardContainer.appendChild(board);
-        boardContainer.appendChild(nameComponent)
-
-        document.querySelector(".boards").appendChild(boardContainer);
     }
 
     createCell(){
