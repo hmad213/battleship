@@ -31,9 +31,24 @@ class Renderer{
         this.showShips(user.gameboard, userBoard);
         let computerBoard = this.createBoard(computer.name, computer.gameboard);
         computerBoard.classList.add("computer");
+        this.addUserAttackEventListeners(user, computer, computerBoard);
         let boards = document.querySelector(".boards");
+        boards.innerHTML = "";
         boards.appendChild(userBoard);
         boards.appendChild(computerBoard);
+    }
+
+    addUserAttackEventListeners(user, computer, computerBoardDiv){
+        let cell = computerBoardDiv.querySelectorAll(".cell");
+        for(let i = 0; i < cell.length; i++){
+            if(!cell[i].classList.contains("missed") && !cell[i].classList.contains("hit")){
+                cell[i].addEventListener("click", () => {
+                    user.attack(computer.gameboard, [i % 10, Math.floor(i / 10)]);
+                    computer.attack(user.gameboard);
+                    this.renderBoards(user, computer);
+                })
+            }
+        }
     }
 
     showShips(gameboard, boardDiv){
