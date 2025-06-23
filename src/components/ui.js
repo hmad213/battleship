@@ -17,7 +17,7 @@ class Renderer{
         this.showAttacks(gameboard, board);
 
         let nameComponent = document.createElement("h2");
-        nameComponent.textContent = name;
+        nameComponent.textContent = name + "'s board";
 
         boardContainer.appendChild(board);
         boardContainer.appendChild(nameComponent)
@@ -44,11 +44,22 @@ class Renderer{
             if(!cell[i].classList.contains("missed") && !cell[i].classList.contains("hit")){
                 cell[i].addEventListener("click", () => {
                     user.attack(computer.gameboard, [i % 10, Math.floor(i / 10)]);
-                    computer.attack(user.gameboard);
+                    if(computer.gameboard.isGameOver()){
+                        this.renderWinDialog(user.name);
+                    }else{
+                        computer.attack(user.gameboard);
+                        if(user.gameboard.isGameOver()){
+                            this.renderWinDialog(computer.name);
+                        }
+                    }
                     this.renderBoards(user, computer);
                 })
             }
         }
+    }
+
+    renderWinDialog(name){
+
     }
 
     showShips(gameboard, boardDiv){

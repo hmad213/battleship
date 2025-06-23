@@ -9,3 +9,6 @@ u.addShip("carrier", [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]])
 let r = new Renderer();
 
 r.renderBoards(u, c);
+
+
+document.querySelector("dialog").show();

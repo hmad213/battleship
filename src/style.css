@@ -36,6 +36,7 @@ body{
     background-color: white;
     padding: 20px;
     border-radius: 30px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
 .board{
@@ -81,4 +82,42 @@ body{
 
 .ship{
     background-color: blue;
+}
+
+dialog{
+    margin: auto;
+    height: 200px;
+    width: 500px;
+    border: none;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 20px;
+}
+
+dialog h1{
+    font-weight: 100;
+}
+
+dialog button{
+    background-color: #1E90FF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+dialog button:hover{
+    background-color: #1771cc;
+}
+
+.overlay{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0,0,0,0.5);
 }
