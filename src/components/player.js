@@ -17,11 +17,7 @@ class User extends Player{
     }
 
     attack(opponentBoard, position){
-        if(!opponentBoard.isAttacked(position)){
-            opponentBoard.recieveAttack(position);
-            return true;
-        }
-        return false;
+        return {hit: opponentBoard.recieveAttack(position), position: position, ship: opponentBoard.getShip};
     }
 }
 
@@ -79,9 +75,10 @@ class Computer extends Player{
             let x = Math.floor(Math.random() * 10);
             let y = Math.floor(Math.random() * 10);
             if(!opponentBoard.isAttacked([x, y])){
-                opponentBoard.recieveAttack([x, y]);
+                let result = opponentBoard.recieveAttack([x, y]);
                 hasAttacked = true;
-                return [x, y];
+                let ship = opponentBoard.getShip([x, y])
+                return {position: [x, y], hit: result, ship: ship};
             }
         }
     }

@@ -84,13 +84,17 @@ body{
     background-color: blue;
 }
 
+body > span{
+    font-size: 30px;
+}
+
 dialog{
     margin: auto;
     height: 200px;
     width: 500px;
     border: none;
     border-radius: 20px;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -102,22 +106,48 @@ dialog h1{
     font-weight: 100;
 }
 
+.buttons{
+    display: flex;
+    gap: 20px;
+}
+
 dialog button{
-    background-color: #1E90FF;
     color: white;
     padding: 10px 20px;
+    width: 120px;
+    height: 40px;
     border: none;
     border-radius: 50px;
     cursor: pointer;
 }
 
-dialog button:hover{
+.close{
+    background-color: crimson;
+}
+
+.close:hover{
+    background-color: rgb(177, 17, 49);
+}
+
+.play-again{
+    background-color: #1E90FF;
+}
+
+.play-again:hover{
     background-color: #1771cc;
 }
 
 .overlay{
+    display: none;
     position: fixed;
     height: 100vh;
     width: 100vw;
     background-color: rgba(0,0,0,0.5);
+}
+
+.transparent-overlay{
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    display: none;
 }

@@ -31,6 +31,12 @@ class Renderer{
         this.showShips(user.gameboard, userBoard);
         let computerBoard = this.createBoard(computer.name, computer.gameboard);
         computerBoard.classList.add("computer");
+
+        let transparentOverlay = document.createElement("div");
+        transparentOverlay.classList.add("transparent-overlay");
+
+        computerBoard.appendChild(transparentOverlay);
+
         this.addUserAttackEventListeners(user, computer, computerBoard);
         let boards = document.querySelector(".boards");
         boards.innerHTML = "";
@@ -40,26 +46,82 @@ class Renderer{
 
     addUserAttackEventListeners(user, computer, computerBoardDiv){
         let cell = computerBoardDiv.querySelectorAll(".cell");
+        let statusText = document.querySelector("body > span");
         for(let i = 0; i < cell.length; i++){
             if(!cell[i].classList.contains("missed") && !cell[i].classList.contains("hit")){
                 cell[i].addEventListener("click", () => {
-                    user.attack(computer.gameboard, [i % 10, Math.floor(i / 10)]);
-                    if(computer.gameboard.isGameOver()){
-                        this.renderWinDialog(user.name);
-                    }else{
-                        computer.attack(user.gameboard);
-                        if(user.gameboard.isGameOver()){
-                            this.renderWinDialog(computer.name);
-                        }
-                    }
+                    let attack = [i % 10, Math.floor(i / 10)]
+                    let result = user.attack(computer.gameboard, attack);
                     this.renderBoards(user, computer);
-                })
+                    let overlay = document.querySelector(".transparent-overlay");
+                    overlay.style.display = "block";
+
+                    if (computer.gameboard.isGameOver()) {
+                    setTimeout(() => {
+                        this.renderWinDialog(user.name);
+                        statusText.textContent = user.name + " wins!";
+                    }, 1500);
+                    return;
+                    }
+
+                    setTimeout(() => {
+                    computer.attack(user.gameboard);
+                    this.renderBoards(user, computer);
+                    statusText.textContent = computer.name + " hit a boat!";
+
+                    if (user.gameboard.isGameOver()) {
+                        setTimeout(() => {
+                            this.renderWinDialog(computer.name);
+                            statusText.textContent = computer.name + " wins!";
+                        }, 1500);
+                    }
+                }, 1500); // wait 1.5s before computer move
+            }, { once: true });
+                }
             }
         }
-    }
 
     renderWinDialog(name){
+        let overlay = document.querySelector(".overlay");
+        overlay.style.display = "block";
+        let dialog = document.querySelector("dialog");
+        dialog.innerHTML = "";
+        dialog.style.display = "flex";
 
+        let nameHeading = document.createElement("h1");
+        nameHeading.textContent = name + " wins!";
+
+        let playAgainButton = document.createElement("button");
+        playAgainButton.textContent = "Play again";
+        playAgainButton.classList.add("play-again");
+
+        let closeButton = document.createElement("button");
+        closeButton.textContent = "Close";
+        closeButton.classList.add("close");
+
+        let buttonsDiv = document.createElement("div");
+        buttonsDiv.classList.add("buttons");
+        buttonsDiv.appendChild(playAgainButton);
+        buttonsDiv.appendChild(closeButton)
+
+        dialog.appendChild(nameHeading)
+        dialog.appendChild(buttonsDiv);
+
+        dialog.show();
+
+        closeButton.addEventListener("click", () => {
+            dialog.close();
+            dialog.style.display = "none";
+            overlay.style.display = "none";
+            //there needs to be logic for disabling user inputs and displaying a play again button down below
+        })
+
+        playAgainButton.addEventListener("click", () => {
+            dialog.close();
+            dialog.style.display = "none";
+            overlay.style.display = "none";
+            //there needs to be a play again function used here
+        })
     }
 
     showShips(gameboard, boardDiv){
