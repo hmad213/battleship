@@ -52,6 +52,7 @@ class Renderer{
                 cell[i].addEventListener("click", () => {
                     let attack = [i % 10, Math.floor(i / 10)]
                     let result = user.attack(computer.gameboard, attack);
+                    this.renderText(user, result);
                     this.renderBoards(user, computer);
                     let overlay = document.querySelector(".transparent-overlay");
                     overlay.style.display = "block";
@@ -65,9 +66,9 @@ class Renderer{
                     }
 
                     setTimeout(() => {
-                    computer.attack(user.gameboard);
+                    let result = computer.attack(user.gameboard);
                     this.renderBoards(user, computer);
-                    statusText.textContent = computer.name + " hit a boat!";
+                    this.renderText(computer, result)
 
                     if (user.gameboard.isGameOver()) {
                         setTimeout(() => {
@@ -80,6 +81,20 @@ class Renderer{
                 }
             }
         }
+
+    renderText(player, result){
+        let statusText = document.querySelector("body > span");
+        if(result.hit){
+            console.log(result)
+            if(result.ship.isSunk()){
+                statusText.textContent = player.name + " has sunk the " + result.ship.name + "!";
+            }else{
+                statusText.textContent = player.name + " has hit a boat!";
+            }
+        }else{
+            statusText.textContent = player.name + " has missed!";
+        }
+    }
 
     renderWinDialog(name){
         let overlay = document.querySelector(".overlay");

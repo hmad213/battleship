@@ -17,7 +17,7 @@ class User extends Player{
     }
 
     attack(opponentBoard, position){
-        return {hit: opponentBoard.recieveAttack(position), position: position, ship: opponentBoard.getShip};
+        return {hit: opponentBoard.recieveAttack(position), position: position, ship: opponentBoard.getShip(position)};
     }
 }
 
