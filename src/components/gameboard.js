@@ -16,10 +16,11 @@ class Gameboard{
             if(this.ships[i].contains(position)){
                 this.ships[i].hit();
                 this.hitAttacks.push(position);
-                return;
+                return true;
             }
         }
         this.missedAttacks.push(position);
+        return false;
     }
 
     isGameOver(){
@@ -48,6 +49,15 @@ class Gameboard{
             }
         }
         return false;
+    }
+
+    getShip(position){
+        for(let i = 0; i < this.ships.length; i++){
+            if(this.ships[i].contains(position)){
+                return this.ships[i];
+            }
+        }
+        return null;
     }
 }
 
