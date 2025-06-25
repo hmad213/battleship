@@ -1,4 +1,18 @@
+const sizes = [
+            ["Patrol Boat", 2],
+            ["Submarine", 3],
+            ["Destroyer", 3],
+            ["Battleship", 4],
+            ["Carrier", 5]
+        ]
+let cur = 0;
+
 class Renderer{
+    startGame(user, computer){
+        this.renderBoards(user, computer, false);
+        this.addUserShips(user, computer);
+    }
+
     createBoard(name, gameboard){
         let boardContainer = document.createElement("div");
         boardContainer.classList.add("board-container");
@@ -25,10 +39,9 @@ class Renderer{
         return boardContainer;
     }
 
-    renderBoards(user, computer){
+    renderBoards(user, computer, hasStarted){
         let userBoard = this.createBoard(user.name, user.gameboard);
         userBoard.classList.add("user");
-        this.showShips(user.gameboard, userBoard);
         let computerBoard = this.createBoard(computer.name, computer.gameboard);
         computerBoard.classList.add("computer");
 
@@ -37,43 +50,132 @@ class Renderer{
 
         computerBoard.appendChild(transparentOverlay);
 
-        this.addUserAttackEventListeners(user, computer, computerBoard);
         let boards = document.querySelector(".boards");
         boards.innerHTML = "";
         boards.appendChild(userBoard);
         boards.appendChild(computerBoard);
+        if(hasStarted){
+            this.addUserAttackEventListeners(user, computer, document.querySelector(".computer > .board"));
+            this.showShips(user.gameboard, userBoard);
+        }
     }
+
+    addUserShips(user, computer){
+        let userBoard = document.querySelector(".user > .board");
+        let vertical = false;
+
+        let coordinates = [];
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key.toLowerCase() === "r") {
+                vertical = !vertical;
+            }
+        });
+
+        let cells = userBoard.querySelectorAll(".cell");
+        for(let i = 0; i < cells.length; i++){
+            cells[i].addEventListener("mouseover", () => {
+                this.renderText("Place your " + sizes[cur][0] + "! (Press R to rotate)");
+
+                for(let j = 0; j < coordinates.length; j++){
+                    cells[coordinates[j][1] * 10 + coordinates[j][0]].classList.remove("preview");
+                }
+                coordinates = [];
+
+                for(let j = 0; j < sizes[cur][1]; j++){
+                    if(vertical){
+                        let [x, y] = [i % 10, Math.floor(i / 10) + j]
+                        if(user.gameboard.isOccupied([x, y]) || y > 9) return;
+                        coordinates.push([x, y])
+                    }else{
+                        let [x, y] = [i % 10 + j, Math.floor(i / 10)]
+                        if(user.gameboard.isOccupied([x, y]) || x > 9) return;
+                        coordinates.push([x, y])
+                    }
+                }
+                for(let j = 0; j < coordinates.length; j++){
+                    cells[coordinates[j][1] * 10 + coordinates[j][0]].classList.add("preview");
+                }
+            })
+            cells[i].addEventListener("click", () => {
+                let coordinates = [];
+                for(let j = 0; j < sizes[cur][1]; j++){
+                    if(vertical){
+                        let [x, y] = [i % 10, Math.floor(i / 10) + j]
+                        if(user.gameboard.isOccupied([x, y]) || y > 9) return;
+                        coordinates.push([x, y])
+                    }else{
+                        let [x, y] = [i % 10 + j, Math.floor(i / 10)]
+                        if(user.gameboard.isOccupied([x, y]) || x > 9) return;
+                        coordinates.push([x, y])
+                    }
+                }
+                user.addShip(sizes[cur][0], coordinates);
+                this.showShips(user.gameboard, userBoard);
+                cur++;
+                if(cur == 5){
+                    this.renderText("Welcome to Battleship!");
+                    this.renderBoards(user, computer, true);
+                }
+            })
+        }
+    }
+
 
     addUserAttackEventListeners(user, computer, computerBoardDiv){
         let cell = computerBoardDiv.querySelectorAll(".cell");
-        let statusText = document.querySelector("body > span");
         for(let i = 0; i < cell.length; i++){
             if(!cell[i].classList.contains("missed") && !cell[i].classList.contains("hit")){
                 cell[i].addEventListener("click", () => {
                     let attack = [i % 10, Math.floor(i / 10)]
                     let result = user.attack(computer.gameboard, attack);
-                    this.renderText(user, result);
-                    this.renderBoards(user, computer);
+
+                    let message;
+                    if(result.hit){
+                        console.log(result)
+                        if(result.ship.isSunk()){
+                            message = user.name + " has sunk the " + result.ship.name + "!";
+                        }else{
+                            message = user.name + " has hit a boat!";
+                        }
+                    }else{
+                        message = user.name + " has missed!";
+                    }
+
+                    this.renderText(message);
+
+                    this.renderBoards(user, computer, true);
                     let overlay = document.querySelector(".transparent-overlay");
                     overlay.style.display = "block";
 
                     if (computer.gameboard.isGameOver()) {
                     setTimeout(() => {
                         this.renderWinDialog(user.name);
-                        statusText.textContent = user.name + " wins!";
+                        this.renderText(user.name + " wins!");
                     }, 1500);
                     return;
                     }
 
                     setTimeout(() => {
                     let result = computer.attack(user.gameboard);
-                    this.renderBoards(user, computer);
-                    this.renderText(computer, result)
+                    this.renderBoards(user, computer, true);
+                    let message;
+                    if(result.hit){
+                        console.log(result)
+                        if(result.ship.isSunk()){
+                            message = computer.name + " has sunk the " + result.ship.name + "!";
+                        }else{
+                            message = computer.name + " has hit a boat!";
+                        }
+                    }else{
+                        message = computer.name + " has missed!";
+                    }
+                    this.renderText(message);
 
                     if (user.gameboard.isGameOver()) {
                         setTimeout(() => {
                             this.renderWinDialog(computer.name);
-                            statusText.textContent = computer.name + " wins!";
+                            this.renderText(computer.name + " wins!");
                         }, 1500);
                     }
                 }, 1500); // wait 1.5s before computer move
@@ -82,18 +184,9 @@ class Renderer{
             }
         }
 
-    renderText(player, result){
+    renderText(message){
         let statusText = document.querySelector("body > span");
-        if(result.hit){
-            console.log(result)
-            if(result.ship.isSunk()){
-                statusText.textContent = player.name + " has sunk the " + result.ship.name + "!";
-            }else{
-                statusText.textContent = player.name + " has hit a boat!";
-            }
-        }else{
-            statusText.textContent = player.name + " has missed!";
-        }
+        statusText.textContent = message;
     }
 
     renderWinDialog(name){

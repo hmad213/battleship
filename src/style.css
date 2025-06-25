@@ -80,7 +80,7 @@ body{
     background-color: red;
 }
 
-.ship{
+.preview, .ship{
     background-color: blue;
 }
 
