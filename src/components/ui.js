@@ -1,3 +1,5 @@
+import { createPlayers } from "..";
+
 const sizes = [
             ["Patrol Boat", 2],
             ["Submarine", 3],
@@ -8,9 +10,47 @@ const sizes = [
 let cur = 0;
 
 class Renderer{
+    showStartMenu(){
+        let menu = document.querySelector(".menu");
+
+        let form = document.createElement("form");
+
+        let label = document.createElement("label");
+        label.textContent = "Enter your name:";
+
+        let input = document.createElement("input");
+        input.type = "text";
+
+        let button = document.createElement("button");
+        button.textContent = "Play";
+
+        form.appendChild(label);
+        form.appendChild(input);
+        form.appendChild(button);
+
+        menu.appendChild(form)
+        
+        document.querySelector("body").inse
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            let players = createPlayers(input.value);
+            menu.remove()
+            this.startGame(...players);
+        })
+    }
+
     startGame(user, computer){
+        cur = 0;
         this.renderBoards(user, computer, false);
         this.addUserShips(user, computer);
+    }
+
+    restartGame(user, computer){
+        user.gameboard.clear();
+        computer.gameboard.clear();
+        computer.generateShips();
+        this.startGame(user, computer);
     }
 
     createBoard(name, gameboard){
@@ -73,6 +113,7 @@ class Renderer{
         });
 
         let cells = userBoard.querySelectorAll(".cell");
+        this.renderText("Place your " + sizes[cur][0] + "! (Press R to rotate)");
         for(let i = 0; i < cells.length; i++){
             cells[i].addEventListener("mouseover", () => {
                 this.renderText("Place your " + sizes[cur][0] + "! (Press R to rotate)");
@@ -132,7 +173,6 @@ class Renderer{
 
                     let message;
                     if(result.hit){
-                        console.log(result)
                         if(result.ship.isSunk()){
                             message = user.name + " has sunk the " + result.ship.name + "!";
                         }else{
@@ -150,9 +190,9 @@ class Renderer{
 
                     if (computer.gameboard.isGameOver()) {
                     setTimeout(() => {
-                        this.renderWinDialog(user.name);
+                        this.renderWinDialog(user, computer, user.name);
                         this.renderText(user.name + " wins!");
-                    }, 1500);
+                    }, 1000);
                     return;
                     }
 
@@ -174,11 +214,11 @@ class Renderer{
 
                     if (user.gameboard.isGameOver()) {
                         setTimeout(() => {
-                            this.renderWinDialog(computer.name);
+                            this.renderWinDialog(user, computer, computer.name);
                             this.renderText(computer.name + " wins!");
-                        }, 1500);
+                        }, 1000);
                     }
-                }, 1500); // wait 1.5s before computer move
+                }, 1000); // wait 1.5s before computer move
             }, { once: true });
                 }
             }
@@ -189,7 +229,7 @@ class Renderer{
         statusText.textContent = message;
     }
 
-    renderWinDialog(name){
+    renderWinDialog(user, computer, name){
         let overlay = document.querySelector(".overlay");
         overlay.style.display = "block";
         let dialog = document.querySelector("dialog");
@@ -203,32 +243,18 @@ class Renderer{
         playAgainButton.textContent = "Play again";
         playAgainButton.classList.add("play-again");
 
-        let closeButton = document.createElement("button");
-        closeButton.textContent = "Close";
-        closeButton.classList.add("close");
-
-        let buttonsDiv = document.createElement("div");
-        buttonsDiv.classList.add("buttons");
-        buttonsDiv.appendChild(playAgainButton);
-        buttonsDiv.appendChild(closeButton)
 
         dialog.appendChild(nameHeading)
-        dialog.appendChild(buttonsDiv);
+        dialog.appendChild(playAgainButton);
 
         dialog.show();
-
-        closeButton.addEventListener("click", () => {
-            dialog.close();
-            dialog.style.display = "none";
-            overlay.style.display = "none";
-            //there needs to be logic for disabling user inputs and displaying a play again button down below
-        })
 
         playAgainButton.addEventListener("click", () => {
             dialog.close();
             dialog.style.display = "none";
             overlay.style.display = "none";
             //there needs to be a play again function used here
+            this.restartGame(user, computer);
         })
     }
 

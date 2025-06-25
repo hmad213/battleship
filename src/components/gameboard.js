@@ -59,6 +59,12 @@ class Gameboard{
         }
         return null;
     }
+
+    clear(){
+        this.ships = [];
+        this.hitAttacks = [];
+        this.missedAttacks = []
+    }
 }
 
 export { Gameboard };
