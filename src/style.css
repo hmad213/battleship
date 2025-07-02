@@ -1,190 +1,193 @@
-*{
-    padding: 0;
-    margin: 0;
+* {
+  padding: 0;
+  margin: 0;
 }
 
-:root{
-    font-family: Arial, Helvetica, sans-serif;
+:root {
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    gap: 50px;
-    background-color: #1E90FF;
-    color: white;
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 50px;
+  background-color: #1e90ff;
+  color: white;
 }
 
-.title{
-    font-family: "Sixtyfour", sans-serif;
+.title {
+  font-family: "Sixtyfour", sans-serif;
 }
 
-.menu{
-    background-color: white;
-    padding: 30px;
-    border-radius: 20px;
-    width: 300px;
-    color: black;
+.menu {
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 300px;
+  color: black;
 }
 
-form{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-form input{
-    font-size: 18px;
-    font-family: inherit;
-    border-radius: 10px;
-    padding: 5px;
+form input {
+  font-size: 18px;
+  font-family: inherit;
+  border-radius: 10px;
+  padding: 5px;
 }
 
-form button{
-    background-color: green;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    border: none;
-    border-radius: 20px;
-    padding: 10px 20px;
-    width: 100px;
-    align-self: center;
+form button {
+  background-color: green;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 100px;
+  align-self: center;
 }
 
-form button:hover{
-    background-color: rgb(0, 87, 0);
+form button:hover {
+  background-color: rgb(0, 87, 0);
 }
 
-.boards{
-    display: flex;
-    gap: 150px;
-    color: black;
+.boards {
+  display: flex;
+  gap: 150px;
+  color: black;
 }
 
-.board-container{
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    gap: 30px;
-    background-color: white;
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+.board-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 30px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 30px;
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
 }
 
-.board{
-    width: 350px;
-    height: 350px;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
+.board {
+  width: 350px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
 }
 
-.row{
-    display: flex;
-    flex: 1;
+.row {
+  display: flex;
+  flex: 1;
 }
 
-.cell{
-    border: 1px solid black;
-    flex: 1;
+.cell {
+  border: 1px solid black;
+  flex: 1;
 }
 
-.computer .cell:hover{
-    background-color: lightblue;
-    cursor: pointer;
+.computer .cell:hover {
+  background-color: lightblue;
+  cursor: pointer;
 }
 
-.board .missed{
-    background-color: green;
-    cursor: default;
+.board .missed {
+  background-color: green;
+  cursor: default;
 }
 
-.board .hit{
-    background-color: red;
-    cursor: default;
+.board .hit {
+  background-color: red;
+  cursor: default;
 }
 
-.board .missed:hover{
-    background-color: green;
+.board .missed:hover {
+  background-color: green;
 }
 
-.board .hit:hover{
-    background-color: red;
+.board .hit:hover {
+  background-color: red;
 }
 
-.preview, .ship{
-    background-color: blue;
+.preview,
+.ship {
+  background-color: blue;
 }
 
-body > span{
-    font-size: 30px;
+body > span {
+  font-size: 30px;
 }
 
-dialog{
-    margin: auto;
-    height: 200px;
-    width: 500px;
-    border: none;
-    border-radius: 20px;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    padding-top: 20px;
+dialog {
+  margin: auto;
+  height: 200px;
+  width: 500px;
+  border: none;
+  border-radius: 20px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding-top: 20px;
 }
 
-dialog h1{
-    font-weight: 100;
+dialog h1 {
+  font-weight: 100;
 }
 
-.buttons{
-    display: flex;
-    gap: 20px;
+.buttons {
+  display: flex;
+  gap: 20px;
 }
 
-dialog button{
-    color: white;
-    padding: 10px 20px;
-    width: 120px;
-    height: 40px;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
+dialog button {
+  color: white;
+  padding: 10px 20px;
+  width: 120px;
+  height: 40px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
 }
 
-.close{
-    background-color: crimson;
+.close {
+  background-color: crimson;
 }
 
-.close:hover{
-    background-color: rgb(177, 17, 49);
+.close:hover {
+  background-color: rgb(177, 17, 49);
 }
 
-.play-again{
-    background-color: #1E90FF;
+.play-again {
+  background-color: #1e90ff;
 }
 
-.play-again:hover{
-    background-color: #1771cc;
+.play-again:hover {
+  background-color: #1771cc;
 }
 
-.overlay{
-    display: none;
-    position: fixed;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0,0,0,0.5);
+.overlay {
+  display: none;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.transparent-overlay{
-    position: absolute;
-    width: 350px;
-    height: 350px;
-    display: none;
+.transparent-overlay {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  display: none;
 }
